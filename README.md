@@ -35,27 +35,35 @@ The focus of this project was on inspecting network protocols such as ICMP, SSH,
 
 <h2>Synopsis</h2>
 
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/96b47b3a-aed1-45f9-a23e-3119f5dece6e)
+
+
 <p>
-<img src="https://i.imgur.com/PuaPt3D.png" height="70%" width="70%"/>
+
 </p>
 <p>
 To begin this lab, I initiated the setup of two virtual machines: VM1 with Windows 10 and VM2 with Ubuntu. After their creation, I verified their presence in the same virtual network (vnet) and subnet using Network Watcher
 </p>
 <br />
 
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/d9d949b5-601e-42c3-a5a1-e38fd77e582a)
+
 <p>
-<img src="https://i.imgur.com/aZ5e3QF.png" height="70%" width="70%"/>
+
+
 </p>
 <p>
-In the top right corner is the public IP address, which I copied and pasted into Remote Desktop in order to connect to VM1 and use it for the lab.
+I copied and pasted the public IP address, located in the upper right corner, into Remote Desktop to establish a connection with VM1 and proceed with the lab tasks.
 </p>
 <br />
 
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/1e04eaab-96f2-49fd-ae52-8035c8584bec)
+
 <p>
-<img src="https://i.imgur.com/qZAaOKM.png" height="70%" width="70%"/>
+
 </p>
 <p>
-Once I was in VM1, I used Microsoft Edge to install Wireshark, opened it, and also opened Windows PowerShell. I then filtered for ICMP in Wireshark (in the green line) and initiated a non-stop ping to VM2 using its private IP address. For each ping, Wireshark shows the request from VM1 to VM2 and the reply from VM2 to VM1!
+After accessing VM1, I utilized Microsoft Edge to download and install Wireshark. Upon opening Wireshark and Windows PowerShell, I applied a filter for ICMP traffic (displayed in the green line) and initiated a continuous ping to VM2 using its private IP address. Wireshark then captured each ping request from VM1 to VM2 and the corresponding reply from VM2 to VM1.
 </p>
 <br />
 
@@ -63,15 +71,20 @@ Once I was in VM1, I used Microsoft Edge to install Wireshark, opened it, and al
 <img src="https://i.imgur.com/r2sTBjV.png" height="70%" width="70%"/>
 </p>
 <p>
-After making sure that I could ping VM2, I went to the Network Security Group for VM2 and added an inbound security rule preventing VM2 from receiving ICMP traffic, meaning that it would not be able to receive pings.
+After ensuring that I could ping VM2, I accessed VM2's Network Security Group and created a rule to block incoming ICMP traffic, thereby preventing VM2 from responding to pings.
 </p>
+
 <br />
 
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/2b23ce46-1151-40ef-81ea-5618578bedc9)
+
+
 <p>
-<img src="https://i.imgur.com/hqFeBvp.png" height="70%" width="70%"/>
+
+
 </p>
 <p>
-Well, look at that! Now that VM2 cannot receive ICMP traffic, the ping requests are timing out. In Wireshark under “Info,” we can see that there are still requests being sent by VM1, but there are no more replies from VM2, along with a “no response found!” message.
+With VM2 unable to receive ICMP traffic, the ping requests now timeout. In Wireshark's "Info" section, we can observe ongoing requests sent by VM1, but VM2 doesn't respond anymore, displaying a "no response found!" message.
 </p>
 <br />
 
@@ -79,51 +92,66 @@ Well, look at that! Now that VM2 cannot receive ICMP traffic, the ping requests 
 <img src="https://i.imgur.com/jDPXYbg.png" height="15%" width="15%"/>
 </p>
 <p>
-I went back to VM2’s Network Security Group and clicked on the rule that I had created and selected the “Allow” option under “Action” so that incoming ICMP traffic would be allowed to VM2 again.
+I revisited VM2's Network Security Group, accessed the previously created rule, and changed the "Action" to "Allow," restoring VM2's ability to receive incoming ICMP traffic.
 </p>
 <br />
 
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/561aa250-367c-4091-9737-e013ba8bf719)
+
+
 <p>
-<img src="https://i.imgur.com/rSfEOeL.png" height="70%" width="70%"/>
+
 </p>
 <p>
-Now that ICMP traffic was allowed again, both the PowerShell terminal and Wireshark showed that replies were again being sent by VM2. I was done observing ICMP traffic in Wireshark, so I ended the ping activity in PowerShell.
+After permitting ICMP traffic again, VM2 resumed sending replies as observed in both the PowerShell terminal and Wireshark. Having completed the ICMP traffic observation in Wireshark, I terminated the ping activity in PowerShell.
 </p>
 <br />
 
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/c696cfdc-82a3-4b9e-b1d9-0df9d66ef960)
+
+
 <p>
-<img src="https://i.imgur.com/0gWpLSn.png" height="70%" width="70%"/>
+
 </p>
 <p>
 I then filtered for SSH traffic in Wireshark and used the PowerShell terminal to “SSH into” VM2. Connecting to VM2 using SSH, along with typing and executing commends, generated SSH packets that could be observed in Wireshark. Using the “exit” command, I ended the SSH session and returned to the original terminal.
 </p>
 <br />
 
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/772c2131-bd01-4b8c-bd3d-a743a1c0ebdd)
+
+
 <p>
-<img src="https://i.imgur.com/4jzRJ1P.png" height="70%" width="70%"/>
+
 </p>
 <p>
-In order to view DHCP traffic, I filtered for DHCP traffic in Wireshark and used the “ipconfig /renew” command to attempt to issue a new IP address to VM1. Although the private IP address did not change, Wireshark shows that there was a request and acknowledgement, so DHCP traffic was generated.
+To inspect DHCP traffic, I applied a filter for DHCP in Wireshark and executed the "ipconfig /renew" command on VM1 to try obtaining a new IP address. Despite the IP address remaining unchanged, Wireshark captured the request and acknowledgement, confirming the generation of DHCP traffic
+</p>
+<br />
+
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/d4da170f-1543-47e1-8234-e9932e9d8141)
+
+
+<p>
+
+</p>
+<p>
+After filtering Wireshark for DNS traffic, I utilized the "nslookup" command to fetch google.com's information. The terminal showed both IPv4 and IPv6 addresses, and Wireshark's "Info" section displayed A and AAAA records, matching the types of IP addresses observed.
+</p>
+<br />
+
+![image](https://github.com/jtowns14/wireshark-network-protocols/assets/139197948/e46e24c1-6efd-4b11-a499-67e9fba8a9a2)
+
+
+<p>
+
+</p>
+<p>
+Finally, I used Wireshark to examine RDP traffic, which didn't require the PowerShell terminal since my physical computer's connection to the VM was generating RDP traffic continuously. Wireshark displayed real-time packets sent during the active RDP connection. While other protocols were filtered by name (e.g., "DNS"), for RDP, I opted to filter using its port number (tcp.port == 3389), both methods work effectively as long as the port is known!
 </p>
 <br />
 
 <p>
-<img src="https://i.imgur.com/wrRxGbT.png" height="70%" width="70%"/>
-</p>
-<p>
-In Wireshark, I then filtered for DNS traffic and used the “nslookup” command for google.com. In the terminal, we can see that it returned both IPv4 and IPv6 addresses; in Wireshark under “Info,” we can see that there are A and AAAA records, which corresponds to the types of IP addresses we see!
-</p>
-<br />
 
-<p>
-<img src="https://i.imgur.com/mFVXr7c.png" height="70%" width="70%"/>
-</p>
-<p>
-Lastly, I used Wireshark to view RDP traffic, which I did not need to use the PowerShell terminal for since RDP traffic was already being generated by my physical computer being connected to the VM. Since this was an active connection, RDP traffic was continually generated, and Wireshark showed each packet being sent in the moment. For the previous protocols, I filtered for them in Wireshark using its name (e.g. “DNS”); for RDP traffic, I decided to filter using its port number (tcp.port == 3389), and either way it works, as long as you know the port!
-</p>
-<br />
-
-<p>
-✨ All done! This lab was the first time I used Wireshark, and it was pretty fun. I definitely recommend those new to IT to give it a try, it’s pretty cool to see all the packets you capture!
 </p>
 <br />
